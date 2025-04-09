@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# 
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Online-Chess-API", "Online-Chess-API\Online-Chess-API.csproj", "{F8EB2981-8BB6-4A28-9622-C404629391C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Online-Chess-API.Core", "Online-Chess-API.Core\Online-Chess-API.Core.csproj", "{F37A1A6B-0624-4475-AB5F-5E6C03FB7C6D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Online-Chess-API.Infrastructure", "Online-Chess-API.Infrastructure\Online-Chess-API.Infrastructure.csproj", "{0DDB72C6-A85C-4142-A52F-301326351E8B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Online-Chess-API.IntegrationTests", "Online-Chess-API.IntegrationTests\Online-Chess-API.IntegrationTests.csproj", "{8DD44D2E-8977-4F2A-8DC6-60BDF91C43AE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F8EB2981-8BB6-4A28-9622-C404629391C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8EB2981-8BB6-4A28-9622-C404629391C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8EB2981-8BB6-4A28-9622-C404629391C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8EB2981-8BB6-4A28-9622-C404629391C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F37A1A6B-0624-4475-AB5F-5E6C03FB7C6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F37A1A6B-0624-4475-AB5F-5E6C03FB7C6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F37A1A6B-0624-4475-AB5F-5E6C03FB7C6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F37A1A6B-0624-4475-AB5F-5E6C03FB7C6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DDB72C6-A85C-4142-A52F-301326351E8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DDB72C6-A85C-4142-A52F-301326351E8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DDB72C6-A85C-4142-A52F-301326351E8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DDB72C6-A85C-4142-A52F-301326351E8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DD44D2E-8977-4F2A-8DC6-60BDF91C43AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DD44D2E-8977-4F2A-8DC6-60BDF91C43AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DD44D2E-8977-4F2A-8DC6-60BDF91C43AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DD44D2E-8977-4F2A-8DC6-60BDF91C43AE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
