@@ -17,80 +17,162 @@ namespace Online_Chess_API.Infrastructure.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.4")
+                .HasAnnotation("ProductVersion", "9.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Online_Chess_API.Core.Models.ChessGame", b =>
                 {
-                    b.Property<int>("GameId")
+                    b.Property<string>("GameId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("game_id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GameId"));
+                    b.Property<string>("BlackId")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("black_id");
 
-                    b.Property<int>("BlackId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BlackRating")
-                        .HasColumnType("int");
+                    b.Property<short>("BlackRating")
+                        .HasColumnType("smallint")
+                        .HasColumnName("black_rating");
 
                     b.Property<string>("Moves")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(1413)
+                        .HasColumnType("nvarchar(1413)")
+                        .HasColumnName("moves");
 
                     b.Property<string>("OpeningCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)")
+                        .HasColumnName("opening_code");
 
                     b.Property<string>("OpeningFullname")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(91)
+                        .HasColumnType("nvarchar(91)")
+                        .HasColumnName("opening_fullname");
 
-                    b.Property<string>("OpeningMoves")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte>("OpeningMoves")
+                        .HasColumnType("tinyint")
+                        .HasColumnName("opening_moves");
 
                     b.Property<string>("OpeningResponse")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)")
+                        .HasColumnName("opening_response");
 
                     b.Property<string>("OpeningShortname")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(26)
+                        .HasColumnType("nvarchar(26)")
+                        .HasColumnName("opening_shortname");
 
                     b.Property<string>("OpeningVariation")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(47)
+                        .HasColumnType("nvarchar(47)")
+                        .HasColumnName("opening_variation");
 
                     b.Property<bool>("Rated")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("rated");
 
                     b.Property<string>("TimeIncrement")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(7)
+                        .HasColumnType("nvarchar(7)")
+                        .HasColumnName("time_increment");
 
-                    b.Property<int>("Turns")
-                        .HasColumnType("int");
+                    b.Property<short>("Turns")
+                        .HasColumnType("smallint")
+                        .HasColumnName("turns");
 
                     b.Property<string>("VictoryStatus")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)")
+                        .HasColumnName("victory_status");
 
-                    b.Property<int>("WhiteId")
-                        .HasColumnType("int");
+                    b.Property<string>("WhiteId")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("white_id");
 
-                    b.Property<int>("WhiteRating")
-                        .HasColumnType("int");
+                    b.Property<short>("WhiteRating")
+                        .HasColumnType("smallint")
+                        .HasColumnName("white_rating");
 
                     b.Property<string>("Winner")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)")
+                        .HasColumnName("winner");
 
                     b.HasKey("GameId");
 
-                    b.ToTable("ChessGames", (string)null);
+                    b.ToTable("chess_games", "dbo");
+
+                    b.HasData(
+                        new
+                        {
+                            GameId = "1",
+                            BlackId = "a-00",
+                            BlackRating = (short)1191,
+                            Moves = "d4 d5 c4 c6 cxd5 e6 dxe6 fxe6 Nf3 Bb4+ Nc3 Ba5 Bf4",
+                            OpeningCode = "D10",
+                            OpeningFullname = "Slav Defense: Exchange Variation",
+                            OpeningMoves = (byte)5,
+                            OpeningShortname = "Slav Defense",
+                            Rated = false,
+                            TimeIncrement = "15+2",
+                            Turns = (short)13,
+                            VictoryStatus = "Out of Time",
+                            WhiteId = "bourgris",
+                            WhiteRating = (short)1500,
+                            Winner = "White"
+                        },
+                        new
+                        {
+                            GameId = "3",
+                            BlackId = "a-00",
+                            BlackRating = (short)1500,
+                            Moves = "e4 e5 d3 d6 Be3 c6 Be2 b5 Nd2 a5 a4 c5 axb5 Nc6 bxc6 Ra6 Nc4 a4 c3 a3 Nxa3 Rxa3 Rxa3 c4 dxc4 d5 cxd5 Qxd5 exd5 Be6 Ra8+ Ke7 Bc5+ Kf6 Bxf8 Kg6 Bxg7 Kxg7 dxe6 Kh6 exf7 Nf6 Rxh8 Nh5 Bxh5 Kg5 Rxh7 Kf5 Qf3+ Ke6 Bg4+ Kd6 Rh6+ Kc5 Qe3+ Kb5 c4+ Kb4 Qc3+ Ka4 Bd1#",
+                            OpeningCode = "C20",
+                            OpeningFullname = "King's Pawn Game: Leonardis Variation",
+                            OpeningMoves = (byte)3,
+                            OpeningShortname = "King's Pawn Game",
+                            Rated = true,
+                            TimeIncrement = "5+10",
+                            Turns = (short)61,
+                            VictoryStatus = "Mate",
+                            WhiteId = "ischia",
+                            WhiteRating = (short)1496,
+                            Winner = "White"
+                        },
+                        new
+                        {
+                            GameId = "4",
+                            BlackId = "adivanov2009",
+                            BlackRating = (short)1454,
+                            Moves = "d4 d5 Nf3 Bf5 Nc3 Nf6 Bf4 Ng4 e3 Nc6 Be2 Qd7 O-O O-O-O Nb5 Nb4 Rc1 Nxa2 Ra1 Nb4 Nxa7+ Kb8 Nb5 Bxc2 Bxc7+ Kc8 Qd2 Qc6 Na7+ Kd7 Nxc6 bxc6 Bxd8 Kxd8 Qxb4 e5 Qb8+ Ke7 dxe5 Be4 Ra7+ Ke6 Qe8+ Kf5 Qxf7+ Nf6 Nh4+ Kg5 g3 Ng4 Qf4+ Kh5 Qxg4+ Kh6 Qf4+ g5 Qf6+ Bg6 Nxg6 Bg7 Qxg7#",
+                            OpeningCode = "D02",
+                            OpeningFullname = "Queen's Pawn Game: Zukertort Variation",
+                            OpeningMoves = (byte)3,
+                            OpeningShortname = "Queen's Pawn Game",
+                            Rated = true,
+                            TimeIncrement = "20+0",
+                            Turns = (short)61,
+                            VictoryStatus = "Mate",
+                            WhiteId = "daniamurashov",
+                            WhiteRating = (short)1439,
+                            Winner = "White"
+                        });
                 });
 
             modelBuilder.Entity("Online_Chess_API.Core.Models.Comment", b =>
@@ -103,13 +185,17 @@ namespace Online_Chess_API.Infrastructure.Data.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("datetime('now')");
 
-                    b.Property<int>("GameId")
-                        .HasColumnType("int");
+                    b.Property<string>("GameId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -130,23 +216,28 @@ namespace Online_Chess_API.Infrastructure.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("user_id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("datetime('now')");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime?>("LastLogin")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Username")
                         .IsRequired()

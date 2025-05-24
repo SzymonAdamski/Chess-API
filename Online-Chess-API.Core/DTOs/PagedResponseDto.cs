@@ -2,7 +2,7 @@ namespace Online_Chess_API.Core.DTOs
 {
     public class PagedResponseDto<T>
     {
-        public IEnumerable<T> Items { get; set; }
+        public IEnumerable<T> Items { get; set; } = new List<T>();
         public int TotalItems { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }

@@ -15,7 +15,7 @@ namespace Online_Chess_API.Infrastructure.Repositories
             _context = context;
         }
         
-        public async Task<IEnumerable<Comment>> GetCommentsByGameIdAsync(int gameId, PaginationDto pagination)
+        public async Task<IEnumerable<Comment>> GetCommentsByGameIdAsync(string gameId, PaginationDto pagination)
         {
             var query = _context.Comments
                 .Include(c => c.User)
@@ -67,7 +67,7 @@ namespace Online_Chess_API.Infrastructure.Repositories
             return true;
         }
         
-        public async Task<int> GetTotalCommentsCountForGameAsync(int gameId)
+        public async Task<int> GetTotalCommentsCountForGameAsync(string gameId)
         {
             return await _context.Comments.CountAsync(c => c.GameId == gameId);
         }

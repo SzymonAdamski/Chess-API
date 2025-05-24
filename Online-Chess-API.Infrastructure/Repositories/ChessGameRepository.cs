@@ -17,27 +17,34 @@ namespace Online_Chess_API.Infrastructure.Repositories
             _context = context;
         }
         
+        public async Task<ChessGame> GetGameByIdAsync(string id)
+        {
+            return await _context.ChessGames
+                .FirstOrDefaultAsync(g => g.GameId == id);
+        }
+
         public async Task<IEnumerable<ChessGame>> GetAllGamesAsync(PaginationDto pagination)
         {
-            var query = _context.ChessGames.AsQueryable();
+            var query = _context.ChessGames
+                .AsQueryable();
             
             // Apply sorting
             if (!string.IsNullOrEmpty(pagination.SortBy))
             {
-                var propertyInfo = typeof(ChessGame).GetProperty(pagination.SortBy, 
+                var sortPropertyInfo = typeof(ChessGame).GetProperty(pagination.SortBy, 
                     BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
                 
-                if (propertyInfo != null)
+                if (sortPropertyInfo != null)
                 {
                     var parameter = Expression.Parameter(typeof(ChessGame), "x");
-                    var property = Expression.Property(parameter, propertyInfo);
-                    var lambda = Expression.Lambda(property, parameter);
+                    var propertyExpr = Expression.Property(parameter, sortPropertyInfo);
+                    var lambda = Expression.Lambda(propertyExpr, parameter);
                     
                     var methodName = pagination.SortDescending ? "OrderByDescending" : "OrderBy";
                     var resultExpression = Expression.Call(
                         typeof(Queryable),
                         methodName,
-                        new[] { typeof(ChessGame), propertyInfo.PropertyType },
+                        new[] { typeof(ChessGame), sortPropertyInfo.PropertyType },
                         query.Expression,
                         Expression.Quote(lambda));
                         
@@ -50,14 +57,6 @@ namespace Online_Chess_API.Infrastructure.Repositories
                 .Skip((pagination.PageNumber - 1) * pagination.PageSize)
                 .Take(pagination.PageSize)
                 .ToListAsync();
-        }
-        
-        public async Task<ChessGame> GetGameByIdAsync(int id)
-        {
-            return await _context.ChessGames
-                .Include(g => g.Comments)
-                .ThenInclude(c => c.User)
-                .FirstOrDefaultAsync(g => g.GameId == id);
         }
         
         public async Task<ChessGame> CreateGameAsync(ChessGame game)
@@ -74,7 +73,7 @@ namespace Online_Chess_API.Infrastructure.Repositories
             return game;
         }
         
-        public async Task<bool> DeleteGameAsync(int id)
+        public async Task<bool> DeleteGameAsync(string id)
         {
             var game = await _context.ChessGames.FindAsync(id);
             if (game == null)
@@ -92,48 +91,54 @@ namespace Online_Chess_API.Infrastructure.Repositories
         
         public async Task<IEnumerable<ChessGame>> FilterGamesAsync(string property, string value, PaginationDto pagination)
         {
-            var query = _context.ChessGames.AsQueryable();
+            var query = _context.ChessGames
+                .AsQueryable();
             
             // Apply filter
             if (!string.IsNullOrEmpty(property) && !string.IsNullOrEmpty(value))
             {
-                var propertyInfo = typeof(ChessGame).GetProperty(property, 
+                var filterPropertyInfo = typeof(ChessGame).GetProperty(property, 
                     BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
                 
-                if (propertyInfo != null)
+                if (filterPropertyInfo != null)
                 {
                     var parameter = Expression.Parameter(typeof(ChessGame), "x");
-                    var propertyExpr = Expression.Property(parameter, propertyInfo);
+                    var propertyExpr = Expression.Property(parameter, filterPropertyInfo);
                     var valueExpr = Expression.Constant(value);
                     
                     // For string properties, perform a contains operation
-                    if (propertyInfo.PropertyType == typeof(string))
+                    if (filterPropertyInfo.PropertyType == typeof(string))
                     {
                         var containsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
                         var containsExpression = Expression.Call(propertyExpr, containsMethod, valueExpr);
-                        var lambda = Expression.Lambda<Func<ChessGame, bool>>(containsExpression, parameter);
-                        query = query.Where(lambda);
+                        var filterLambda = Expression.Lambda<Func<ChessGame, bool>>(containsExpression, parameter);
+                        query = query.Where(filterLambda);
                     }
-                    else if (propertyInfo.PropertyType == typeof(int))
+                    else if (filterPropertyInfo.PropertyType == typeof(int))
                     {
                         int intValue;
                         if (int.TryParse(value, out intValue))
                         {
                             var intValueExpr = Expression.Constant(intValue);
                             var equalExpression = Expression.Equal(propertyExpr, intValueExpr);
-                            var lambda = Expression.Lambda<Func<ChessGame, bool>>(equalExpression, parameter);
-                            query = query.Where(lambda);
+                            var filterLambda = Expression.Lambda<Func<ChessGame, bool>>(equalExpression, parameter);
+                            query = query.Where(filterLambda);
+                        }
+                        else
+                        {
+                            // Jeu015Bli nie udau0142o siu0119 przekonwertowau0107 wartou015Bci, zwracamy pusty wynik
+                            return Enumerable.Empty<ChessGame>();
                         }
                     }
-                    else if (propertyInfo.PropertyType == typeof(bool))
+                    else if (filterPropertyInfo.PropertyType == typeof(bool))
                     {
                         bool boolValue;
                         if (bool.TryParse(value, out boolValue))
                         {
                             var boolValueExpr = Expression.Constant(boolValue);
                             var equalExpression = Expression.Equal(propertyExpr, boolValueExpr);
-                            var lambda = Expression.Lambda<Func<ChessGame, bool>>(equalExpression, parameter);
-                            query = query.Where(lambda);
+                            var filterLambda = Expression.Lambda<Func<ChessGame, bool>>(equalExpression, parameter);
+                            query = query.Where(filterLambda);
                         }
                     }
                 }
@@ -142,22 +147,22 @@ namespace Online_Chess_API.Infrastructure.Repositories
             // Apply sorting
             if (!string.IsNullOrEmpty(pagination.SortBy))
             {
-                var propertyInfo = typeof(ChessGame).GetProperty(pagination.SortBy, 
+                var sortPropertyInfo = typeof(ChessGame).GetProperty(pagination.SortBy, 
                     BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
                 
-                if (propertyInfo != null)
+                if (sortPropertyInfo != null)
                 {
-                    var parameter = Expression.Parameter(typeof(ChessGame), "x");
-                    var propertySort = Expression.Property(parameter, propertyInfo);
-                    var lambda = Expression.Lambda(propertySort, parameter);
+                    var sortParameter = Expression.Parameter(typeof(ChessGame), "x");
+                    var sortPropertyExpr = Expression.Property(sortParameter, sortPropertyInfo);
+                    var sortLambda = Expression.Lambda(sortPropertyExpr, sortParameter);
                     
                     var methodName = pagination.SortDescending ? "OrderByDescending" : "OrderBy";
                     var resultExpression = Expression.Call(
                         typeof(Queryable),
                         methodName,
-                        new[] { typeof(ChessGame), propertyInfo.PropertyType },
+                        new[] { typeof(ChessGame), sortPropertyInfo.PropertyType },
                         query.Expression,
-                        Expression.Quote(lambda));
+                        Expression.Quote(sortLambda));
                         
                     query = query.Provider.CreateQuery<ChessGame>(resultExpression);
                 }
